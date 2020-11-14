@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './vendor/winjs/winstrap/css/winstrap.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
