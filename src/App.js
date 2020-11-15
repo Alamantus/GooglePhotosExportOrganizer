@@ -1,21 +1,51 @@
+import React from 'react';
+
+import SidebarNav from './SidebarNav';
+import Step1 from './Views/Step1';
 import SettingsList from './SettingsList';
 
-function App() {
-  return (
-    <div>
-      <header className="page-header">
-        <div className="container">
-          <div className="row">
-            <div className="col-xs-24">
-              <h1 className="type-h2">Export Organizer</h1>
-              <h2 className="type-sh2">for Google Photos</h2>
-            </div>
-          </div>
-        </div>
-      </header>
-      <SettingsList />
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentView: 0,
+    }
+  }
+
+  render() {
+    let CurrentView;
+    switch (this.state.currentView) {
+      default:
+      case 0: {
+        CurrentView = Step1;
+        break;
+      }
+      case 1: {
+        CurrentView = SettingsList;
+        break;
+      }
+      case 2: {
+        CurrentView = SettingsList;
+        break;
+      }
+    }
+    
+    return (
+      <section>
+        <section className="row">
+          <aside className="col-xs-6">
+            <SidebarNav currentNav={ this.state.currentView }
+              changeView={ (view) => this.setState({ currentView: view }) }
+            />
+          </aside>
+          <section className="col-xs-18">
+            <CurrentView />
+          </section>
+        </section>
+      </section>
+    );
+  }
 }
 
 export default App;
