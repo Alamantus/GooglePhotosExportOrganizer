@@ -35,7 +35,7 @@ class SettingsList extends React.Component {
 
   render() {
     return (
-    <div className="entity-list entity-list-expandable">
+    <ul className="entity-list entity-list-expandable">
       <ListItem title="Zip Folder Location"
         description="Where your exported zip files from Google are located."
         icon="open-local"
@@ -43,7 +43,7 @@ class SettingsList extends React.Component {
         detail2={ <span className={ `glyph glyph-${this.state.zipFolderValid ? 'checkmark' : 'important'}` }></span> }
         onButtonClick={ () => this.requestZipFolderPath() }
       />
-    </div>
+    </ul>
     );
   }
 }

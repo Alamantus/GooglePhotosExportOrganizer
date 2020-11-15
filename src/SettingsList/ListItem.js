@@ -11,7 +11,8 @@ class ListItem extends React.Component {
 
   render() {
     return (
-      <div className={ `entity-list-item${this.state.expanded ? ' active' : ''}` }
+      <li className={ `entity-list-item${this.state.expanded ? ' active' : ''}` }
+        style={{ listStyle: 'none' }}
         onClick={() => this.setState({ expanded: true })}
       >
         <div className="item-icon">
@@ -30,7 +31,7 @@ class ListItem extends React.Component {
             { this.props.detail1 ? 'Change' : 'Set' }
           </button>
         </div>
-      </div>
+      </li>
     );
   }
 }
