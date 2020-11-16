@@ -1,8 +1,10 @@
 import React from 'react';
 
+import { NAV_ITEMS } from './constants';
+
 import SidebarNav from './SidebarNav';
 import Step1 from './Views/Step1';
-import SettingsList from './SettingsList';
+import Step2 from './Views/Step2';
 
 class App extends React.Component {
   constructor(props) {
@@ -10,7 +12,16 @@ class App extends React.Component {
 
     this.state = {
       currentView: 0,
+      zipFolderPath: null,
+      unzipFolderPath: null,
+      organizeIntoPath: null,
     }
+  }
+
+  updatePath(stateKey, path) {
+    const newState = {};
+    newState[stateKey] = path;
+    this.setState(newState);
   }
 
   render() {
@@ -22,11 +33,11 @@ class App extends React.Component {
         break;
       }
       case 1: {
-        CurrentView = SettingsList;
+        CurrentView = Step2;
         break;
       }
       case 2: {
-        CurrentView = SettingsList;
+        CurrentView = Step2;
         break;
       }
     }
@@ -40,7 +51,36 @@ class App extends React.Component {
             />
           </aside>
           <section className="col-xs-18">
-            <CurrentView />
+            <CurrentView
+              zipFolderPath={ this.state.zipFolderPath }
+              unzipFolderPath={ this.state.unzipFolderPath }
+              organizeIntoPath={ this.state.organizeIntoPath }
+              updatePath={ (stateKey, path) => this.updatePath(stateKey, path) }
+            />
+            <nav>
+              <ul className="pager">
+                {
+                  this.state.currentView > 0 &&
+                  <li className="pager-prev">
+                    <button className="btn btn-link"
+                      onClick={ () => this.setState({ currentView: this.state.currentView - 1 })}
+                    >
+                      <i aria-hidden="true" className="glyph glyph-chevron-left-2"></i> Previous Step
+                    </button>
+                  </li>
+                }
+                {
+                  this.state.currentView < NAV_ITEMS.length &&
+                  <li className="pager-next">
+                    <button className="btn btn-link"
+                      onClick={() => this.setState({ currentView: this.state.currentView + 1 })}
+                    >
+                      Next Step <i aria-hidden="true" className="glyph glyph-chevron-right-2"></i>
+                    </button>
+                  </li>
+                }
+              </ul>
+            </nav>
           </section>
         </section>
       </section>
