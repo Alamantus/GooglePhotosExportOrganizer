@@ -28,8 +28,15 @@ class ListItem extends React.Component {
         </div>
         <div className="item-content-expanded">
           <button className="btn btn-default" onClick={this.props.onButtonClick}>
-            { this.props.detail1 ? 'Change' : 'Set' }
+            { this.props.buttonText }
           </button>
+          {
+            !this.props.onButton2Click ? null : (
+            <button className="btn btn-default" onClick={this.props.onButton2Click}>
+              { this.props.button2Text }
+            </button>
+            )
+          }
         </div>
       </li>
     );
