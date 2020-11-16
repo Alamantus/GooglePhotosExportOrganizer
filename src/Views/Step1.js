@@ -18,7 +18,7 @@ function Step1(props) {
   return (
     <article>
       <h1 className="type-h2">{ NAV_ITEMS[0] }</h1>
-      <p class="type-p1">
+      <p className="type-p1">
         Follow the instructions on <ExternalLink href={ blogLink }>this page</ExternalLink> to
         export your Google Photos from Google Takeout. 
       </p>
