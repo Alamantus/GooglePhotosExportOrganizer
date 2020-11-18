@@ -20,10 +20,12 @@ class Step2 extends React.Component {
 
   componentDidMount() {
     ipcRenderer.on('finish-dialog', this.handleFolderPathChange.bind(this));
+    ipcRenderer.on('progress', this.handleProgress.bind(this));
   }
 
   componentWillUnmount() {
     ipcRenderer.removeListener('finish-dialog', this.handleFolderPathChange.bind(this));
+    ipcRenderer.removeListener('progress', this.handleProgress.bind(this));
   }
 
   requestZipFolderPath() {
@@ -38,6 +40,22 @@ class Step2 extends React.Component {
     if (result !== false) {
       this.props.updatePath(result.stateProperty, result.path);
     }
+  }
+
+  requestExtract() {
+    ipcRenderer.invoke('extract', this.props.zipFolderPath, this.props.unzipFolderPath);
+  }
+
+  handleProgress(event, progress) {
+    const newState = {
+      running: true,
+      progress,
+    };
+    if (progress >= 1) {
+      newState.running = false;
+    }
+    console.log(newState);
+    this.setState(newState);
   }
 
   render() {
@@ -72,7 +90,7 @@ class Step2 extends React.Component {
           {
             !this.state.running && this.state.progress < 1 && (
               <button className="btn btn-primary" disabled={ !(this.props.zipFolderPath && this.props.unzipFolderPath) }
-                onClick={ () => {} }
+                onClick={ () => this.requestExtract() }
               >
                 Begin File Extract
               </button>

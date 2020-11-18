@@ -55,5 +55,15 @@ ipcMain.handle('open-dialog', (event, stateProperty) => {
       stateProperty,
       path: false,
     });
-  })
-})
+  });
+});
+
+ipcMain.handle('extract', (event, zipFolderPath, unzipFolderPath) => {
+  const numZipFiles = 100;
+  for (let i = 0; i < numZipFiles; i++) {
+    setTimeout(() => {
+      const progress = i / numZipFiles;
+      mainWindow.webContents.send('progress', progress);
+    }, 100 * i);
+  }
+});
