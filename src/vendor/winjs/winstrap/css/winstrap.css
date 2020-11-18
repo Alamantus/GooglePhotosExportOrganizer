@@ -11103,7 +11103,7 @@ a.link-on-dark {
   position: relative;
   width: 180px;
   float: inherit;
-  display: inline-block; }
+  display: block; }
   .progress-bar .progress-circle {
     position: absolute;
     top: 0;
