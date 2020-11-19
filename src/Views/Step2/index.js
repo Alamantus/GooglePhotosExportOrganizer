@@ -3,6 +3,8 @@ import { ipcRenderer } from 'electron';
 
 import { NAV_ITEMS } from '../../constants';
 import ListItem from './ListItem';
+import ProgressBar from './ProgressBar';
+import FilesTable from './FilesTable';
 
 class Step2 extends React.Component {
   constructor(props) {
@@ -11,21 +13,23 @@ class Step2 extends React.Component {
     this.state = {
       running: false,
       progress: 0,
+      files: [],
+      extracted: [],
+      errored: [],
+      showFiles: false,
     }
-  }
-
-  get progressPercent() {
-    return this.state.progress * 100;
   }
 
   componentDidMount() {
     ipcRenderer.on('finish-dialog', this.handleFolderPathChange.bind(this));
     ipcRenderer.on('progress', this.handleProgress.bind(this));
+    ipcRenderer.on('file-error', this.handleFileError.bind(this));
   }
-
+  
   componentWillUnmount() {
     ipcRenderer.removeListener('finish-dialog', this.handleFolderPathChange.bind(this));
     ipcRenderer.removeListener('progress', this.handleProgress.bind(this));
+    ipcRenderer.removeListener('file-error', this.handleFileError.bind(this));
   }
 
   requestZipFolderPath() {
@@ -43,18 +47,30 @@ class Step2 extends React.Component {
   }
 
   requestExtract() {
-    ipcRenderer.invoke('extract', this.props.zipFolderPath, this.props.unzipFolderPath);
+    this.setState({ running: true }, () => {
+      ipcRenderer.invoke('extract', this.props.zipFolderPath, this.props.unzipFolderPath);
+    })
   }
 
-  handleProgress(event, progress) {
+  handleProgress(event, report) {
+    const { running, progress } = report;
     const newState = {
-      running: true,
+      running,
       progress,
     };
-    if (progress >= 1) {
-      newState.running = false;
+    if (typeof report.files !== 'undefined') {
+      newState.files = report.files;
     }
-    console.log(newState);
+    if (typeof report.fileName !== 'undefined') {
+      newState.extracted = [...this.state.extracted, report.fileName];
+    }
+    this.setState(newState);
+  }
+
+  handleFileError(event, report) {
+    const newState = {
+      errored: [...this.state.errored, report.fileName],
+    };
     this.setState(newState);
   }
 
@@ -86,7 +102,20 @@ class Step2 extends React.Component {
             onButton2Click={ () => this.props.updatePath('unzipFolderPath', this.props.zipFolderPath) }
           />
         </ul>
-        <div>
+
+        <div className="container">
+          <div className="alert alert-warning" role="alert">
+            <div className="alert-title">This Will Take a While</div>
+            <p>
+              Fully extracting all of the files from your large Google Takeout export files will take a long time
+              unless you don't have very many files, and interrupting the program may cause problems.
+            </p>
+            <p>
+              Please ensure your computer has enough battery, and let the program run after clicking the button&mdash;after
+              the first file is extracted, the progress bar will begin filling up to show you its progress.
+            </p>
+          </div>
+
           {
             !this.state.running && this.state.progress < 1 && (
               <button className="btn btn-primary" disabled={ !(this.props.zipFolderPath && this.props.unzipFolderPath) }
@@ -96,33 +125,23 @@ class Step2 extends React.Component {
               </button>
             )
           }
+
           {
-            this.state.running && this.state.progress <= 0 && (
-              <div className="progress-bar">
-                <div className="progress-circle"></div>
-                <div className="progress-circle"></div>
-                <div className="progress-circle"></div>
-                <div className="progress-circle"></div>
-                <div className="progress-circle"></div>
-              </div>
+            this.state.running && (
+              <ProgressBar
+                progress={ this.state.progress }
+                errored={ this.state.errored.length > 0 }
+              />
             )
           }
+
           {
-            this.state.progress > 0 && (
-              <div>
-                <div className="progress">
-                  <div className="progress-bar" role="progressbar"
-                    aria-valuenow={this.progressPercent} aria-valuemin="0" aria-valuemax="100"
-                    style={{ width: this.progressPercent.toString() + '%' }}>
-                    <span className="sr-only">{ this.progressPercent.toString() + '%' }</span>
-                  </div>
-                </div>
-                {
-                  this.state.progress >= 1 && (
-                    <span><i className="glyph glyph-checkmark" /></span>
-                  )
-                }
-              </div>
+            this.state.files.length > 0 && (
+              <FilesTable
+                files={ this.state.files }
+                extracted={ this.state.extracted }
+                errored={ this.state.errored }
+              />
             )
           }
         </div>

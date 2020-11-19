@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const extractZip = require('./extract');
 
 let mainWindow = null;
 
@@ -59,11 +60,12 @@ ipcMain.handle('open-dialog', (event, stateProperty) => {
 });
 
 ipcMain.handle('extract', (event, zipFolderPath, unzipFolderPath) => {
-  const numZipFiles = 100;
-  for (let i = 0; i < numZipFiles; i++) {
-    setTimeout(() => {
-      const progress = i / numZipFiles;
-      mainWindow.webContents.send('progress', progress);
-    }, 100 * i);
-  }
+  extractZip(zipFolderPath, unzipFolderPath, (report) => {
+    if (typeof report.error === 'undefined') {
+      mainWindow.webContents.send('progress', report);
+    } else {
+      console.error(report.message, report.error);
+      mainWindow.webContents.send('file-error', report);
+    }
+  });
 });
