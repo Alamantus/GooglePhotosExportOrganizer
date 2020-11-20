@@ -5,6 +5,7 @@ import { NAV_ITEMS } from './constants';
 import SidebarNav from './SidebarNav';
 import Step1 from './Views/Step1';
 import Step2 from './Views/Step2';
+import Step3 from './Views/Step3';
 
 class App extends React.Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class App extends React.Component {
         break;
       }
       case 2: {
-        CurrentView = Step2;
+        CurrentView = Step3;
         break;
       }
     }

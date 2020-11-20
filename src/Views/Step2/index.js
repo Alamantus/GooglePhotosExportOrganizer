@@ -2,7 +2,7 @@ import React from 'react';
 import { ipcRenderer } from 'electron';
 
 import { NAV_ITEMS } from '../../constants';
-import ListItem from './ListItem';
+import ListItem from '../ListItem';
 import ProgressBar from './ProgressBar';
 import FilesTable from './FilesTable';
 
