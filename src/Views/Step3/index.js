@@ -12,10 +12,10 @@ class Step3 extends React.Component {
     this.state = {
       running: false,
       progress: 0,
-      renameStrategy: RENAME_STRATEGIES.KEEP,
+      renameStrategy: 'KEEP',
       // files: [],
       // extracted: [],
-      // errored: [],
+      errored: [],
       // showFiles: false,
     }
   }
@@ -108,27 +108,27 @@ class Step3 extends React.Component {
           <div className="btn-group" data-toggle="buttons">
             <label className="btn btn-default active">
               <input type="radio" name="rename-strategy" id="renameStrategy1" autocomplete="off"
-                defaultChecked={ this.state.renameStrategy === RENAME_STRATEGIES.KEEP }
+                defaultChecked={ this.state.renameStrategy === 'KEEP' }
                 onChange={(event) => {
                   if (event.target.checked) {
-                    this.setState({ renameStrategy: RENAME_STRATEGIES.KEEP });
+                    this.setState({ renameStrategy: 'KEEP' });
                   }
                 }}
               /> { RENAME_STRATEGIES.KEEP }
             </label>
             <label className="btn btn-default">
               <input type="radio" name="rename-strategy" id="renameStrategy2" autocomplete="off"
-                defaultChecked={ this.state.renameStrategy === RENAME_STRATEGIES.DATE }
+                defaultChecked={ this.state.renameStrategy === 'DATE' }
                 onChange={(event) => {
                   if (event.target.checked) {
-                    this.setState({ renameStrategy: RENAME_STRATEGIES.DATE });
+                    this.setState({ renameStrategy: 'DATE' });
                   }
                 }}
               /> { RENAME_STRATEGIES.DATE }
             </label>
           </div>
           {
-            this.state.renameStrategy === RENAME_STRATEGIES.KEEP
+            this.state.renameStrategy === 'KEEP'
             ? (
               <p>The original file names of your images will not be changed. Files will only be moved into the appropriate folder.</p>
             ) : (
@@ -141,9 +141,7 @@ class Step3 extends React.Component {
           <div className="alert alert-warning" role="alert">
             <div className="alert-title">This Will Take a While</div>
             <p>
-              Organizing all of your files may take a long time, and interrupting the program may cause problems.
-            </p>
-            <p>
+              Organizing all of your files may take a long time, and interrupting the program may cause problems.<br />
               Please ensure your computer has enough battery, and let the program run after clicking the button.
             </p>
           </div>
@@ -159,7 +157,7 @@ class Step3 extends React.Component {
           }
 
           {
-            this.state.running && (
+            (this.state.running || this.state.progress > 0) && (
               <ProgressBar
                 progress={ this.state.progress }
                 errored={ this.state.errored.length > 0 }
