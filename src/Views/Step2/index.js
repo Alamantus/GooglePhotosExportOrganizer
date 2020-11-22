@@ -3,7 +3,7 @@ import { ipcRenderer } from 'electron';
 
 import { NAV_ITEMS } from '../../constants';
 import ListItem from '../ListItem';
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../ProgressBar';
 import FilesTable from './FilesTable';
 
 class Step2 extends React.Component {
