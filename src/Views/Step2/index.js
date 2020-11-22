@@ -127,7 +127,7 @@ class Step2 extends React.Component {
           }
 
           {
-            this.state.running && (
+            (this.state.running || this.state.progress > 0) && (
               <ProgressBar
                 progress={ this.state.progress }
                 errored={ this.state.errored.length > 0 }
