@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 const extractZip = require('./extract');
+const organize = require('./organize');
 
 let mainWindow = null;
 
@@ -61,6 +62,17 @@ ipcMain.handle('open-dialog', (event, stateProperty) => {
 
 ipcMain.handle('extract', (event, zipFolderPath, unzipFolderPath) => {
   extractZip(zipFolderPath, unzipFolderPath, (report) => {
+    if (typeof report.error === 'undefined') {
+      mainWindow.webContents.send('progress', report);
+    } else {
+      console.error(report.message, report.error);
+      mainWindow.webContents.send('file-error', report);
+    }
+  });
+});
+
+ipcMain.handle('organize', (event, unzipFolderPath, organizeIntoPath) => {
+  organize(unzipFolderPath, organizeIntoPath, (report) => {
     if (typeof report.error === 'undefined') {
       mainWindow.webContents.send('progress', report);
     } else {
