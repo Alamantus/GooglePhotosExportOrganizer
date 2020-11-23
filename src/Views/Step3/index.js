@@ -23,13 +23,13 @@ class Step3 extends React.Component {
   componentDidMount() {
     ipcRenderer.on('finish-dialog', this.handleFolderPathChange.bind(this));
     ipcRenderer.on('progress', this.handleProgress.bind(this));
-    ipcRenderer.on('file-error', this.handleFileError.bind(this));
+    // ipcRenderer.on('file-error', this.handleFileError.bind(this));
   }
   
   componentWillUnmount() {
     ipcRenderer.removeListener('finish-dialog', this.handleFolderPathChange.bind(this));
     ipcRenderer.removeListener('progress', this.handleProgress.bind(this));
-    ipcRenderer.removeListener('file-error', this.handleFileError.bind(this));
+    // ipcRenderer.removeListener('file-error', this.handleFileError.bind(this));
   }
 
   requestUnzipFolderPath() {
@@ -53,26 +53,21 @@ class Step3 extends React.Component {
   }
 
   handleProgress(event, report) {
-    const { running, progress } = report;
+    const { running, progress, errored } = report;
     const newState = {
       running,
       progress,
+      errored,
     };
-    if (typeof report.files !== 'undefined') {
-      newState.files = report.files;
-    }
-    if (typeof report.fileName !== 'undefined') {
-      newState.extracted = [...this.state.extracted, report.fileName];
-    }
     this.setState(newState);
   }
 
-  handleFileError(event, report) {
-    const newState = {
-      errored: [...this.state.errored, report.fileName],
-    };
-    this.setState(newState);
-  }
+  // handleFileError(event, report) {
+  //   const newState = {
+  //     errored: [...this.state.errored, report.fileName],
+  //   };
+  //   this.setState(newState);
+  // }
 
   render() {
     return (
@@ -89,8 +84,6 @@ class Step3 extends React.Component {
             detail2={ <span className={`glyph glyph-${this.props.unzipFolderPath !== null ? 'checkmark' : 'important'}`}></span> }
             buttonText={ this.props.unzipFolderPath ? 'Change' : 'Set' }
             onButtonClick={ () => this.requestUnzipFolderPath() }
-            button2Text="Use Zip Folder Location"
-            onButton2Click={ () => this.props.updatePath('unzipFolderPath', this.props.zipFolderPath) }
           />
           <ListItem title="Sort Files To"
             description="Where you want your organized files moved to."
@@ -99,7 +92,7 @@ class Step3 extends React.Component {
             detail2={ <span className={`glyph glyph-${this.props.organizeIntoPath !== null ? 'checkmark' : 'important'}`}></span> }
             buttonText={ this.props.organizeIntoPath ? 'Change' : 'Set' }
             onButtonClick={ () => this.requestOrganizeIntoPath() }
-            button2Text="Use Zip Folder Location"
+            button2Text="Use Extracted Location"
             onButton2Click={ () => this.props.updatePath('organizeIntoPath', this.props.unzipFolderPath) }
           />
         </ul>
@@ -148,7 +141,7 @@ class Step3 extends React.Component {
 
           {
             !this.state.running && this.state.progress < 1 && (
-              <button className="btn btn-primary" disabled={ !(this.props.zipFolderPath && this.props.unzipFolderPath) }
+              <button className="btn btn-primary" disabled={ !(this.props.unzipFolderPath && this.props.organizeIntoPath) }
                 onClick={ () => this.requestOrganize() }
               >
                 Start Organizing

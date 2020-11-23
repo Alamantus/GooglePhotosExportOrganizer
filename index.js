@@ -73,11 +73,11 @@ ipcMain.handle('extract', (event, zipFolderPath, unzipFolderPath) => {
 
 ipcMain.handle('organize', (event, unzipFolderPath, organizeIntoPath) => {
   organize(unzipFolderPath, organizeIntoPath, (report) => {
-    if (typeof report.error === 'undefined') {
+    // if (typeof report.error === 'undefined') {
       mainWindow.webContents.send('progress', report);
-    } else {
-      console.error(report.message, report.error);
-      mainWindow.webContents.send('file-error', report);
-    }
+    // } else {
+    //   console.error(report.message, report.error);
+    //   mainWindow.webContents.send('file-error', report);
+    // }
   });
 });
