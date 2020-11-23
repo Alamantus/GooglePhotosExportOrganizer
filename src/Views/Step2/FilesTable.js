@@ -18,11 +18,17 @@ function FilesTable(props) {
                   props.errored.includes(file)
                   ? <span><i className={ `glyph glyph-cancel` } title="Could not extract" /></span>
                   : (
-                  <span>
-                    <i className={ `glyph glyph-${ props.extracted.includes(file) ? 'checkmark' : 'clock' }` }
-                      title={ props.extracted.includes(file) ? 'Extracted!' : 'Working...' }
-                    />
-                  </span>
+                    props.extracted.includes(file)
+                    ? <span><i className="glyph glyph-checkmark" title="Extracted!" /></span>
+                    : (
+                      <div className="progress-ring" title="Working...">
+                        <div className="progress-circle"></div>
+                        <div className="progress-circle"></div>
+                        <div className="progress-circle"></div>
+                        <div className="progress-circle"></div>
+                        <div className="progress-circle"></div>
+                      </div>
+                    )
                   )
                 }
                 </td>
