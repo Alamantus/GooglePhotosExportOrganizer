@@ -76,7 +76,7 @@ class Step2 extends React.Component {
 
   render() {
     return (
-      <section>
+      <section className="container">
         <h1 className="type-h2">{NAV_ITEMS[1]}</h1>
         <p className="type-p1">
           This step will extract and merge all of your exported <code>.zip</code> files from your Google Takeout

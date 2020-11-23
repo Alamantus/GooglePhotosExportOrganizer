@@ -16,7 +16,7 @@ function ExternalLink(props) {
 function Step1(props) {
   const blogLink = 'https://robbie.antenesse.net/2020/11/16/exporting-google-photos.html'
   return (
-    <article>
+    <article className="container">
       <h1 className="type-h2">{ NAV_ITEMS[0] }</h1>
       <p className="type-p1">
         Follow the instructions for Step 1 on <ExternalLink href={ blogLink }>this page</ExternalLink> to
