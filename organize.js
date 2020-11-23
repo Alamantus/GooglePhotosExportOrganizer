@@ -5,8 +5,10 @@ function organize(currentPath, organizeIntoPath, renameStrategy = 'KEEP', progre
   // Figure out a better way to do this... I know there's a better way, I just can't think of it right now.
   let totalFiles  = 0;
   let processedFiles = 0;
-  let filesErrored = [];
+  let erroredFiles = [];
+  let reports = 0;
   const promises = organizeFolder(currentPath, organizeIntoPath, renameStrategy, (report) => {
+    reports++;
     if (report.addFileToProcess) {
       totalFiles++;
     }
@@ -17,21 +19,26 @@ function organize(currentPath, organizeIntoPath, renameStrategy = 'KEEP', progre
       processedFiles++;
     }
     if (report.error && report.errored) {
-      filesErrored.push(report.errored);
+      erroredFiles.push(report.errored);
     }
-    const reportToSend = {
-      running: true,
-      progress: processedFiles / totalFiles,
-      errored: filesErrored,
-    };
-    console.log(reportToSend);
-    progressReporter(reportToSend);
+    if (reports % 100 === 0) {    // Send report every 100 reports
+      const reportToSend = {
+        running: true,
+        // totalFiles,
+        // processedFiles,
+        progress: processedFiles / totalFiles,
+        errored: erroredFiles,
+      };
+      // console.log('sending', reportToSend);
+      progressReporter(reportToSend);
+    }
   });
 
   Promise.all(promises).then(() => {
     progressReporter({
       running: false,
       progress: 1,
+      errored: erroredFiles,
     })
   })
 }
@@ -66,7 +73,7 @@ function organizeFolder(currentPath, organizeIntoPath, renameStrategy = 'KEEP', 
         const metaPath = fullPath + '.json';
         if (!fs.existsSync(metaPath)) {
           // console.log('Metadata for ' + fullPath + ' does not exist. Skipping file.');
-          reject({
+          return reject({
             removeFileToProcess: true,
           });
         }
@@ -104,7 +111,7 @@ function organizeFolder(currentPath, organizeIntoPath, renameStrategy = 'KEEP', 
 
         fs.rename(fullPath, path.resolve(targetPath, newName), (err) => {
           if (err) {
-            reject({
+            return reject({
               error: true,
               errored: fullPath,
             });
@@ -112,7 +119,7 @@ function organizeFolder(currentPath, organizeIntoPath, renameStrategy = 'KEEP', 
             progressReporter({
               addFileProcessed: true,
             })
-            console.log('moved ' + fullPath + ' to ' + path.resolve(targetPath, newName));
+            // console.log('moved ' + fullPath + ' to ' + path.resolve(targetPath, newName));
             resolve();
           }
         });
@@ -123,7 +130,7 @@ function organizeFolder(currentPath, organizeIntoPath, renameStrategy = 'KEEP', 
         });
       }
     }).catch((rejected) => {
-      console.log(rejected);
+      console.error(rejected);
       progressReporter(rejected);
     });
   });

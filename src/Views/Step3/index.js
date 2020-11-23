@@ -48,12 +48,13 @@ class Step3 extends React.Component {
 
   requestOrganize() {
     this.setState({ running: true }, () => {
-      ipcRenderer.invoke('organize', this.props.unzipFolderPath, this.props.organizeIntoPath);
+      ipcRenderer.invoke('organize', this.props.unzipFolderPath, this.props.organizeIntoPath, this.state.renameStrategy);
     })
   }
 
   handleProgress(event, report) {
-    const { running, progress, errored } = report;
+    console.log(report);
+    const { running, progress, errored = [] } = report;
     const newState = {
       running,
       progress,
@@ -98,39 +99,37 @@ class Step3 extends React.Component {
         </ul>
         
         <section className="container">
-          <div className="btn-group" data-toggle="buttons">
-            <label className="btn btn-default active">
-              <input type="radio" name="rename-strategy" id="renameStrategy1" autocomplete="off"
-                defaultChecked={ this.state.renameStrategy === 'KEEP' }
-                onChange={(event) => {
-                  if (event.target.checked) {
-                    this.setState({ renameStrategy: 'KEEP' });
-                  }
-                }}
-              /> { RENAME_STRATEGIES.KEEP }
-            </label>
-            <label className="btn btn-default">
-              <input type="radio" name="rename-strategy" id="renameStrategy2" autocomplete="off"
-                defaultChecked={ this.state.renameStrategy === 'DATE' }
-                onChange={(event) => {
-                  if (event.target.checked) {
-                    this.setState({ renameStrategy: 'DATE' });
-                  }
-                }}
-              /> { RENAME_STRATEGIES.DATE }
-            </label>
+          <h3 className="type-sh3">Rename Files</h3>
+          <div className="btn-group m-t-xxxs" data-toggle="buttons">
+            {
+              Object.keys(RENAME_STRATEGIES).map((renameStrategy, index) => {
+                const selected = this.state.renameStrategy === renameStrategy;
+                return (
+                  <label key={'renameStrategy_' + index} className={`btn btn-default${selected ? ' active' : ''}`}>
+                    <input type="radio" name="rename-strategy"
+                      defaultChecked={selected}
+                      onChange={(event) => {
+                        if (event.target.checked) {
+                          this.setState({ renameStrategy });
+                        }
+                      }}
+                    /> { RENAME_STRATEGIES[renameStrategy]}
+                  </label>
+                );
+              })
+            }
           </div>
+          <p className="type-p3 m-t-n p-t-n m-b-xs">
           {
             this.state.renameStrategy === 'KEEP'
-            ? (
-              <p>The original file names of your images will not be changed. Files will only be moved into the appropriate folder.</p>
-            ) : (
-              <p>The file names of your images will be changed to the year, month, day and hour, minute, and second that the photo was taken when moved.</p>
-            )
+            ? 'The original file names of your images will not be changed. Files will only be moved into the appropriate folder.'
+            : 'The file names of your images will be changed to the year, month, day and hour, minute, and second that the photo was taken when moved.'
           }
+          </p>
         </section>
 
         <div className="container">
+          {/*
           <div className="alert alert-warning" role="alert">
             <div className="alert-title">This Will Take a While</div>
             <p>
@@ -138,6 +137,7 @@ class Step3 extends React.Component {
               Please ensure your computer has enough battery, and let the program run after clicking the button.
             </p>
           </div>
+          */}
 
           {
             !this.state.running && this.state.progress < 1 && (
