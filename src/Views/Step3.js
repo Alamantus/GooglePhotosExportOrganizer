@@ -1,9 +1,9 @@
 import React from 'react';
 import { ipcRenderer } from 'electron';
 
-import { NAV_ITEMS, RENAME_STRATEGIES } from '../../constants';
-import ListItem from '../ListItem';
-import ProgressBar from '../ProgressBar';
+import { NAV_ITEMS, RENAME_STRATEGIES } from '../constants';
+import ListItem from './ListItem';
+import ProgressBar from './ProgressBar';
 
 class Step3 extends React.Component {
   constructor(props) {
@@ -53,14 +53,22 @@ class Step3 extends React.Component {
   }
 
   handleProgress(event, report) {
-    console.log(report);
     const { running, progress, errored = [] } = report;
     const newState = {
       running,
       progress,
       errored,
     };
-    this.setState(newState);
+    this.setState(newState, () => {
+      if (this.state.running && this.state.progress < 1) {
+        if (typeof this.timeoutFailsafe !== "undefined") {
+          clearTimeout(this.timeoutFailsafe);
+        }
+        this.timeoutFailsafe = setTimeout(() => { // If 20 seconds ever passes 
+          this.setState({ running: false, progress: 1 });
+        }, 20000);
+      }
+    });
   }
 
   // handleFileError(event, report) {
@@ -72,7 +80,7 @@ class Step3 extends React.Component {
 
   render() {
     return (
-      <section>
+      <section className="container">
         <h1 className="type-h2">{NAV_ITEMS[2]}</h1>
         <p className="type-p1">
           This step will take all of your extracted files and organize them into one place.

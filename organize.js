@@ -39,8 +39,9 @@ function organize(currentPath, organizeIntoPath, renameStrategy = 'KEEP', progre
       running: false,
       progress: 1,
       errored: erroredFiles,
-    })
-  })
+    });
+  });
+  
 }
 
 function organizeFolder(currentPath, organizeIntoPath, renameStrategy = 'KEEP', progressReporter = () => {}) {
@@ -55,14 +56,14 @@ function organizeFolder(currentPath, organizeIntoPath, renameStrategy = 'KEEP', 
   }
   
   return fileNames.map((origName, index) => {
+    // If file is a directory, then go into it.
+    const fullPath = path.resolve(currentPath, origName);
+    if (fs.existsSync(fullPath) && fs.lstatSync(fullPath).isDirectory()) {
+      // console.log('Going deeper into ' + fullPath);
+      return organizeFolder(fullPath, organizeIntoPath, renameStrategy, progressReporter);
+    }
     return new Promise((resolve, reject) => {
       try {
-        // If file is a directory, then go into it.
-        const fullPath = path.resolve(currentPath, origName);
-        if (fs.existsSync(fullPath) && fs.lstatSync(fullPath).isDirectory()) {
-          // console.log('Going deeper into ' + fullPath);
-          return resolve(organizeFolder(fullPath, organizeIntoPath, renameStrategy, progressReporter));
-        }
         progressReporter({
           addFileToProcess: true,
         });
@@ -94,10 +95,7 @@ function organizeFolder(currentPath, organizeIntoPath, renameStrategy = 'KEEP', 
         
         let newName = origName;
         if (renameStrategy === 'DATE') {
-          const imageNumberLength = origName.indexOf('Photo') >= 0 ? 8 : 4;
-          const imageNumber = origName.substr(-4 - imageNumberLength).substring(0, imageNumberLength);
-
-          newName = formatDateTime(date) + ' ' + imageNumber + extension;
+          newName = formatDateTime(date) + ' ' + (index + 1).toString().padStart(4, '0') + extension;
         }
         const yearTargetPath = path.resolve(organizeIntoPath, year);
         if (!fs.existsSync(yearTargetPath)) {
@@ -139,14 +137,14 @@ function organizeFolder(currentPath, organizeIntoPath, renameStrategy = 'KEEP', 
 function formatDateTime(date) {
   const year = date.getFullYear();
 
-  const month = force2Digit(date.getMonth() + 1);
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
   
-  const day = force2Digit(date.getDate());
+  const day = date.getDate().toString().padStart(2, '0');
   const dateFormatted = year + '-' + month + '-' + day;
 
-  const hour = force2Digit(date.getHours());
-  const minutes = force2Digit(date.getMinutes());
-  const seconds = force2Digit(date.getSeconds());
+  const hour = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
   const timeFormatted = hour + '-' + minutes + '-' + seconds;
 
   return dateFormatted + ' ' + timeFormatted;
