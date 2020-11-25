@@ -1,8 +1,10 @@
 import React from 'react';
 
+import packageDetails from '../package.json';
 import { NAV_ITEMS } from './constants';
 
 import SidebarNav from './SidebarNav';
+import ExternalLink from './ExternalLink';
 import Step1 from './Views/Step1';
 import Step2 from './Views/Step2';
 import Step3 from './Views/Step3';
@@ -17,7 +19,23 @@ class App extends React.Component {
       zipFolderPath: null,
       unzipFolderPath: null,
       organizeIntoPath: null,
+      newVersion: false,
     }
+  }
+
+  componentDidMount() {
+    // Check for updates
+    fetch('https://api.github.com/repos/Alamantus/GooglePhotosExportOrganizer/releases/latest', {
+      method: 'GET',
+      headers: new Headers({
+        'Accept': 'application/vnd.github.v3+json',
+      }),
+    }).then((response) => response.json())
+    .then((release) => {
+      if (typeof release.tag_name !== 'undefined' && release.tag_name > packageDetails.version) {
+        this.setState({ newVersion: true });
+      }
+    })
   }
 
   updatePath(stateKey, path) {
@@ -56,6 +74,30 @@ class App extends React.Component {
           />
         </aside>
         <section className="col-xs-18">
+          {
+            this.state.newVersion && (
+              <div className="alert alert-danger" role="alert">
+                <div className="alert-title">A New Version is Available</div>
+                <div className="row">
+                  <div className="col-md-20">
+                    <p>Please visit the Google Photos Export Organizer page to get the newest version.</p>
+                  </div>
+                  <div className="col-md-4">
+                    <p>
+                      <ExternalLink href="https://alamantus.github.io/GooglePhotosExportOrganizer/"
+                        className="pull-right hidden-xs hidden-sm">
+                        Download Now!
+                      </ExternalLink>
+                      <ExternalLink href="https://alamantus.github.io/GooglePhotosExportOrganizer/"
+                        className="visible-xs-inline visible-sm-inline hidden-md">
+                        Download Now!
+                      </ExternalLink>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )
+          }
           <CurrentView
             zipFolderPath={ this.state.zipFolderPath }
             unzipFolderPath={ this.state.unzipFolderPath }
