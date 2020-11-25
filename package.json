@@ -1,8 +1,9 @@
 {
   "name": "google-photos-export-organizer",
-  "version": "0.1.0",
+  "description": "A tool for merging and organizing exported Google Photos backups.",
+  "version": "1.0.0",
   "private": true,
-  "main": "index.js",
+  "main": "public/electron.js",
   "homepage": "./",
   "author": {
     "name": "Your Name",
@@ -17,7 +18,9 @@
     "eject": "react-scripts eject",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
-    "electron-pack": "electron-builder build -mwl"
+    "electron-pack": "electron-builder build -mwl",
+    "electron-pack-windows": "electron-builder build -wl",
+    "electron-pack-macos": "electron-builder build -m"
   },
   "build": {
     "appId": "com.my-website.google-photos-export-organizer",
