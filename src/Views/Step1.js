@@ -1,17 +1,6 @@
-import { shell } from 'electron';
 import { NAV_ITEMS } from '../constants';
 
-function ExternalLink(props) {
-  return (
-    <button className="btn btn-link p-n m-n"
-      title="Click to open URL in browser"
-      style={{ minWidth: 'unset', verticalAlign: 'inherit', fontSize: 'inherit', }}
-      onClick={() => shell.openExternal(props.href)}
-    >
-      { props.children }
-    </button>
-  );
-}
+import ExternalLink from '../ExternalLink';
 
 function Step1(props) {
   const blogLink = 'https://robbie.antenesse.net/2020/11/26/exporting-google-photos.html'
