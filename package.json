@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "private": true,
   "main": "public/electron.js",
-  "homepage": "./",
+  "homepage": "https://alamantus.github.io/GooglePhotosExportOrganizer/",
   "author": {
-    "name": "Your Name",
-    "email": "your.email@domain.com",
-    "url": "https://your-website.com"
+    "name": "Robbie Antenesse",
+    "email": "dev@alamantus.com",
+    "url": "https://robbie.antenesse.net"
   },
   "scripts": {
     "dev": "concurrently \"yarn start\" \"wait-on http://localhost:3000 && electron .\"",
