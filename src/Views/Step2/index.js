@@ -18,18 +18,22 @@ class Step2 extends React.Component {
       errored: [],
       showFiles: false,
     }
-  }
+
+    this.folderPathChangeHandler = this.handleFolderPathChange.bind(this);
+    this.progressHandler = this.handleProgress.bind(this);
+    this.fileErrorHandler = this.handleFileError.bind(this);
+  } 
 
   componentDidMount() {
-    ipcRenderer.on('finish-dialog', this.handleFolderPathChange.bind(this));
-    ipcRenderer.on('progress', this.handleProgress.bind(this));
-    ipcRenderer.on('file-error', this.handleFileError.bind(this));
+    ipcRenderer.on('finish-dialog', this.folderPathChangeHandler);
+    ipcRenderer.on('progress', this.progressHandler);
+    ipcRenderer.on('file-error', this.fileErrorHandler);
   }
   
   componentWillUnmount() {
-    ipcRenderer.removeListener('finish-dialog', this.handleFolderPathChange.bind(this));
-    ipcRenderer.removeListener('progress', this.handleProgress.bind(this));
-    ipcRenderer.removeListener('file-error', this.handleFileError.bind(this));
+    ipcRenderer.removeListener('finish-dialog', this.folderPathChangeHandler);
+    ipcRenderer.removeListener('progress', this.progressHandler);
+    ipcRenderer.removeListener('file-error', this.fileErrorHandler);
   }
 
   requestZipFolderPath() {
