@@ -3,8 +3,8 @@ import { NAV_ITEMS } from './constants';
 function SidebarNav(props) {
   return (
     <nav role="navigation" id="sidenav"
-      className="nav side-navigation side-navigation-large theme-default" 
-      style={{ position: 'fixed' }}
+      className="nav side-navigation side-navigation-large theme-default"
+      style={{ position: 'fixed', display: 'block' }}
     >
       <header className="navigation-label page-header m-t-n p-l-xxxs">
         <h1 className="type-sh2 p-t-xxs">Export Organizer</h1>

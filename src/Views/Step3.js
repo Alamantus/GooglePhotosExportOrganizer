@@ -85,6 +85,17 @@ class Step3 extends React.Component {
         <p className="type-p1">
           This step will take all of your extracted files and organize them into one place.
         </p>
+        <aside className="alert alert-warning" role="alert">
+          <div className="alert-title">Please Note:</div>
+          <p className="type-p3">
+            <em>This will only rename and move your files!</em> Google Takeout strips all photo metadata and delivers
+            it as <code>.json</code> files separate from the images/videos. A future update is coming to this tool to
+            assign all available metadata back into the files that are moved, but this is not done in this version.
+          </p>
+          <p className="type-p3">
+            Stay tuned and watch for the update alert to see when the new version is available!
+          </p>
+        </aside>
         <ul className="entity-list entity-list-expandable">
           <ListItem title="Extracted Location"
             description="Where you previously extracted your zip files to."

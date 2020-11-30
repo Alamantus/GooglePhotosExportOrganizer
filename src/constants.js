@@ -1,3 +1,5 @@
+export const APP_URL = 'https://alamantus.github.io/GooglePhotosExportOrganizer/';
+
 export const NAV_ITEMS = [
   'Step 1: Export Files',
   'Step 2: Extract Exports',

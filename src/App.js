@@ -1,7 +1,7 @@
 import React from 'react';
 
 import packageDetails from '../package.json';
-import { NAV_ITEMS } from './constants';
+import { APP_URL, NAV_ITEMS } from './constants';
 
 import SidebarNav from './SidebarNav';
 import ExternalLink from './ExternalLink';
@@ -76,6 +76,7 @@ class App extends React.Component {
         <section className="col-xs-18">
           {
             this.state.newVersion && (
+              <div className="alert-stack" role="alert">
               <div className="alert alert-danger" role="alert">
                 <div className="alert-title">A New Version is Available</div>
                 <div className="row">
@@ -84,17 +85,18 @@ class App extends React.Component {
                   </div>
                   <div className="col-md-4">
                     <p>
-                      <ExternalLink href="https://alamantus.github.io/GooglePhotosExportOrganizer/"
+                      <ExternalLink href={ APP_URL }
                         className="pull-right hidden-xs hidden-sm">
                         Download Now!
                       </ExternalLink>
-                      <ExternalLink href="https://alamantus.github.io/GooglePhotosExportOrganizer/"
+                      <ExternalLink href={ APP_URL }
                         className="visible-xs-inline visible-sm-inline hidden-md">
                         Download Now!
                       </ExternalLink>
                     </p>
                   </div>
                 </div>
+              </div>
               </div>
             )
           }
