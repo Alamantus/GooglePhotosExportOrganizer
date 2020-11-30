@@ -44,6 +44,12 @@ class App extends React.Component {
     this.setState(newState);
   }
 
+  changeView(view) {
+    this.setState({ currentView: view }, () => {
+      window.scrollTo(0, 0);
+    })
+  }
+
   render() {
     let CurrentView;
     switch (this.state.currentView) {
@@ -70,7 +76,7 @@ class App extends React.Component {
       <section className="row">
         <aside className="col-xs-6">
           <SidebarNav currentNav={ this.state.currentView }
-            changeView={ (view) => this.setState({ currentView: view }) }
+            changeView={ (view) => this.changeView(view) }
           />
         </aside>
         <section className="col-xs-18">
@@ -112,7 +118,7 @@ class App extends React.Component {
                 this.state.currentView > 0 &&
                 <li className="pager-prev">
                   <button className="btn btn-link"
-                    onClick={ () => this.setState({ currentView: this.state.currentView - 1 })}
+                    onClick={ () => this.changeView(this.state.currentView - 1) }
                   >
                     <i aria-hidden="true" className="glyph glyph-chevron-left-2"></i> Previous Step
                   </button>
@@ -122,7 +128,7 @@ class App extends React.Component {
                 this.state.currentView < NAV_ITEMS.length - 1 &&
                 <li className="pager-next">
                   <button className="btn btn-link"
-                    onClick={() => this.setState({ currentView: this.state.currentView + 1 })}
+                    onClick={ () => this.changeView(this.state.currentView + 1) }
                   >
                     Next Step <i aria-hidden="true" className="glyph glyph-chevron-right-2"></i>
                   </button>
