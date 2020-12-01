@@ -41,10 +41,12 @@
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.1.10",
     "electron-is-dev": "^1.2.0",
+    "piexifjs": "1.0.6",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
     "unzipper": "^0.10.11",
+    "utimes": "^4.0.2",
     "web-vitals": "^1.0.1"
   },
   "eslintConfig": {
