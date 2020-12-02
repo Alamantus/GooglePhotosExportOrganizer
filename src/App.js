@@ -1,4 +1,5 @@
 import React from 'react';
+import semverLt from 'semver/functions/lt';
 
 import packageDetails from '../package.json';
 import { APP_URL, NAV_ITEMS } from './constants';
@@ -32,7 +33,8 @@ class App extends React.Component {
       }),
     }).then((response) => response.json())
     .then((release) => {
-      if (typeof release.tag_name !== 'undefined' && release.tag_name > packageDetails.version) {
+      // If current version is less than latest release version, notify
+      if (typeof release.tag_name !== 'undefined' && semverLt(packageDetails.version, release.tag_name)) {
         this.setState({ newVersion: true });
       }
     })
