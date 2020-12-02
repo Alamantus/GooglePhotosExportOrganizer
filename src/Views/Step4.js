@@ -1,4 +1,4 @@
-import { shell } from 'electron';
+import { ipcRenderer } from 'electron';
 import { NAV_ITEMS } from '../constants';
 
 function Step4(props) {
@@ -35,21 +35,21 @@ function Step4(props) {
         <button
           className="btn btn-default"
           disabled={ props.zipFolderPath === null }
-          onClick={() => shell.openItem(props.zipFolderPath)}
+          onClick={() => ipcRenderer.invoke('open-folder', props.zipFolderPath)}
         >
           Open Folder where the <code>.zip</code> Files Are
         </button>
         <button
           className="btn btn-default"
           disabled={ props.unzipFolderPath === null }
-          onClick={() => shell.openItem(props.unzipFolderPath)}
+          onClick={() => ipcRenderer.invoke('open-folder', props.unzipFolderPath)}
         >
           Open Emptied Folders for Tidying
         </button>
         <button
           className="btn btn-primary"
           disabled={ props.organizeIntoPath === null }
-          onClick={() => shell.openItem(props.organizeIntoPath)}
+          onClick={() => ipcRenderer.invoke('open-folder', props.organizeIntoPath)}
         >
           Open Folder with Organized Photos
         </button>

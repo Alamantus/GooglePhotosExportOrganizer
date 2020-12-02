@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 const extractZip = require('./extract');
@@ -75,4 +75,8 @@ ipcMain.handle('organize', (event, unzipFolderPath, organizeIntoPath, renameStra
   organize(unzipFolderPath, organizeIntoPath, renameStrategy, insertExif, (report) => {
     mainWindow.webContents.send('progress', report);
   });
+});
+
+ipcMain.handle('open-folder', (event, folderPath) => {
+  shell.openPath(folderPath);
 });
