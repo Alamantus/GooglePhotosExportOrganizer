@@ -16,10 +16,12 @@
     "test": "rescripts test",
     "eject": "react-scripts eject",
     "postinstall": "electron-builder install-app-deps",
-    "preelectron-pack": "yarn build",
-    "electron-pack": "electron-builder build -mwl",
-    "electron-pack-windows": "electron-builder build -wl",
-    "electron-pack-macos": "electron-builder build -m"
+    "preelectron-pack-linux": "yarn build",
+    "electron-pack-linux": "electron-builder build -l",
+    "preelectron-pack-macos": "yarn build",
+    "electron-pack-macos": "electron-builder build -m",
+    "preelectron-pack-windows": "yarn build",
+    "electron-pack-windows": "electron-builder build -w"
   },
   "build": {
     "appId": "com.my-website.google-photos-export-organizer",
