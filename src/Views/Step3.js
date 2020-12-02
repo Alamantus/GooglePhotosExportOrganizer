@@ -13,6 +13,7 @@ class Step3 extends React.Component {
       running: false,
       progress: 0,
       renameStrategy: 'KEEP',
+      insertExif: false,
       // files: [],
       // extracted: [],
       errored: [],
@@ -51,7 +52,7 @@ class Step3 extends React.Component {
 
   requestOrganize() {
     this.setState({ running: true }, () => {
-      ipcRenderer.invoke('organize', this.props.unzipFolderPath, this.props.organizeIntoPath, this.state.renameStrategy);
+      ipcRenderer.invoke('organize', this.props.unzipFolderPath, this.props.organizeIntoPath, this.state.renameStrategy, this.state.insertExif);
     })
   }
 
@@ -88,17 +89,6 @@ class Step3 extends React.Component {
         <p className="type-p1">
           This step will take all of your extracted files and organize them into one place.
         </p>
-        <aside className="alert alert-warning" role="alert">
-          <div className="alert-title">Please Note:</div>
-          <p className="type-p3">
-            <em>This will only rename and move your files!</em> Google Takeout strips all photo metadata and delivers
-            it as <code>.json</code> files separate from the images/videos. A future update is coming to this tool to
-            assign all available metadata back into the files that are moved, but this is not done in this version.
-          </p>
-          <p className="type-p3">
-            Stay tuned and watch for the update alert to see when the new version is available!
-          </p>
-        </aside>
         <ul className="entity-list entity-list-expandable">
           <ListItem title="Extracted Location"
             description="Where you previously extracted your zip files to."
@@ -148,6 +138,46 @@ class Step3 extends React.Component {
             : 'The file names of your images will be changed to the year, month, day and hour, minute, and second that the photo was taken when moved.'
           }
           </p>
+        </section>
+
+        <section className="container">
+          <h3 className="type-sh3">Re-Insert Available Exif Metadata</h3>
+          <p className="type-p3 m-t-n p-t-n m-b-n">
+            The timetamps of all moved files will be modified to reflect created, modified, and accessed dates (except
+            if run using Linux, created date cannot be modified). Turn this on to explicitly have all possible metadata
+            provided by Google Takeout added back into the JPEGs.
+          </p>
+          <div className="btn-group m-t-n m-b-xs">
+            <button type="button" data-toggle="button"
+              className={`btn btn-toggle-switch${this.state.insertExif ? ' active' : ''}`}
+              autoComplete="off"
+              aria-pressed={this.state.insertExif ? 'true' : 'false'}
+              onClick={() => this.setState({ insertExif: !this.state.insertExif, })}
+            >
+              <span className="stateLabel stateLabel-on">Yes</span>
+              <span className="stateLabel stateLabel-off">No</span>
+            </button>
+          </div>
+          
+          {
+            this.state.insertExif === true && (
+              <div className="alert alert-warning" role="alert">
+                <div className="alert-title">This Will Take a While</div>
+                <p>
+                  Each photo with a JPEG file format (<code>.jpg</code> or <code>.jpeg</code> file extensions) will have all
+                  available metadata provided by Google Takeout inserted back into the image as Exif metadata. <em>At most</em>,
+                  this includes date taken, image description, and GPS data (latitude, longitude, and altitude), if available.
+                </p>
+                <p>
+                  Please note that your photos <em>may already have their metadata</em>! Do a spot-check on a few photos in your extracted
+                  files to see if GPS data is present. If it is missing and you know the image should have it, using this may add
+                  it back if Google Takeout has provided the data. If you need all of the original Exif data from your photos, use
+                  the "Download" interface from Google Photos itself&mdash;downloading this way will preserve all original metadata but
+                  is restricted to downloading 500 photos at a time for some reason.
+                </p>
+              </div>
+            )
+          }
         </section>
 
         <div className="container">

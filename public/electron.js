@@ -71,8 +71,8 @@ ipcMain.handle('extract', (event, zipFolderPath, unzipFolderPath) => {
   });
 });
 
-ipcMain.handle('organize', (event, unzipFolderPath, organizeIntoPath, renameStrategy) => {
-  organize(unzipFolderPath, organizeIntoPath, renameStrategy, (report) => {
+ipcMain.handle('organize', (event, unzipFolderPath, organizeIntoPath, renameStrategy, insertExif = false) => {
+  organize(unzipFolderPath, organizeIntoPath, renameStrategy, insertExif, (report) => {
     mainWindow.webContents.send('progress', report);
   });
 });
