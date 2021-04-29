@@ -1,7 +1,7 @@
 {
   "name": "google-photos-export-organizer",
   "description": "A tool for merging and organizing exported Google Photos backups.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "main": "public/electron.js",
   "author": {
