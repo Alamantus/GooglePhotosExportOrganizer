@@ -82,6 +82,11 @@ function organizeFolder(currentPath, organizeIntoPath, renameStrategy = 'KEEP', 
         }
         let meta = fs.readFileSync(metaPath, 'utf-8');
         meta = JSON.parse(meta);
+        if (typeof meta.photoTakenTime === 'undefined') {
+          return reject({
+            removeFileToProcess: true,
+          });
+        }
         photoTakenTime = meta.photoTakenTime.formatted;
 
         const date = new Date(photoTakenTime);
@@ -121,7 +126,9 @@ function organizeFolder(currentPath, organizeIntoPath, renameStrategy = 'KEEP', 
             utimes(newFileName, {
               btime: date.getTime(),
               atime: Date.now(),
-              mtime: new Date(meta.modificationTime.formatted).getTime(),
+              mtime: typeof meta.modificationTime !== 'undefined'
+                ? new Date(meta.modificationTime.formatted).getTime()
+                : date.getTime(),
             }).then(() => {
               if (typeof meta.geoData !== 'undefined' && ['.jpg', '.jpeg'].includes(extension) && insertExif) {
                 // If GPS is available and desired, insert GPS into image.
