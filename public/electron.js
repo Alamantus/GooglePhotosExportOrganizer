@@ -9,7 +9,7 @@ let mainWindow = null;
 function createWindow () {
   console.log('creating window');
   mainWindow = new BrowserWindow({
-    width: isDev ? 1100 : 800,
+    width: 1100,
     height: 620,
     webPreferences: {
       nodeIntegration: true,
@@ -17,13 +17,7 @@ function createWindow () {
   });
 
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
-  if (isDev) {
-    // Open the DevTools.
-    //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
-    mainWindow.webContents.openDevTools();
-  } else {
-    mainWindow.removeMenu();
-  }
+  mainWindow.webContents.openDevTools();
   mainWindow.on('closed', () => mainWindow = null);
 }
 
