@@ -7,10 +7,12 @@
   <title>Google Photos Export Organizer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Link to your stylesheet here -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/alamantus/lighter@1.1.0/dist/lighter.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/alamantus/lighter@1.2.0/dist/lighter.css" />
   <style>
+    html { font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif; }
     html, body { margin: 0; }
     .btn { display: inline-block; }
+    dd { margin: 0.5em 0 1em 1em; }
   </style>
 </head>
 
@@ -90,11 +92,58 @@
       </p>
     </article>
   </section>
+  <section>
+    <h2>FAQs &amp; Known Issues</h2>
+    <article>
+      <dl>
+        <dt>
+          <strong>Q:</strong> What language will ensure the best compatibility with my Google Photos export?
+        </dt>
+        <dd>
+          <strong>A:</strong> English is the only automatically-supported language at this time. Google Photos exports from other
+          languages may run into problems until we figure out a good way to add international support.
+        </dd>
+        <dt>
+          <strong>Q:</strong> The Extract process failed to extract all my <code>.zip</code> files! What can I do?
+        </dt>
+        <dd>
+          <strong>A:</strong> We recommend separating your <code>.zip</code> files that failed into a separate folder and re-running
+          the app on that folder with the output set to the original output folder that worked. This should extract the rest of the
+          files correctly, and we're working on a fix for a future update.
+        </dd>
+        <dt>
+          <strong>Q:</strong> After running the Organize process, there are a lot of files left in the original Google Photos folder!
+          What's going on?
+        </dt>
+        <dd>
+          <strong>A:</strong> The Google Photos Export Organizer app uses <code>.json</code> medata files provided in the Google
+          Photos export to identify what files to move. Typically, files without <code>.json</code> files associated with them are
+          edited versions of the original file and might have a number after them indicating that they are duplicates. These files
+          are left in the original folder so you can check and organize them manually yourself if you wish, but the original files
+          with the associated <code>.json</code> files should be correctly organized!
+        </dd>
+        <dt>
+          <strong>Q:</strong> I checked the files left in the Google Photos folder, and they have <code>.json</code> files but were
+          not moved! What's wrong with them?
+        </dt>
+        <dd>
+          <strong>A:</strong> This likely has to do with the problem of only English being automatically supported, specifically US
+          English. If you open some of your <code>.json</code> files in a text editor, you should be able to find a <code>photoTakenDate</code>
+          entry, and within that a <code>formatted</code> entry. The code attempts to parse that <code>formatted</code> value directly
+          into a JavaScript Date object, which unfortunately only recognizes certain formats of date and time, and typically only in
+          English. We have an idea of how to fix it, but will need a bit of time before we can test international dates.<br />
+          One option in the meantime is to change your Google interface to English before running your export. It's far from ideal,
+          but it might make this app work for you!
+        </dd>
+      </dl>
+    </article>
+  </section>
 </main>
 <footer style="margin:50px 0 0;background-color:#abcdef;">
   <div class="c">
     <p>
-      Made with &lt;3 by <a href="https://robbie.antenesse.net" target="_blank">Robbie Antenesse</a>.
+      Made with &lt;3 by <a href="https://robbie.antenesse.net" target="_blank">Robbie Antenesse</a> and presented without the promise
+      of technical support, but I'll do my best when I can!
     </p>
   </div>
 </footer>
