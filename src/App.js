@@ -34,7 +34,7 @@ class App extends React.Component {
     }).then((response) => response.json())
     .then((release) => {
       // If current version is less than latest release version, notify
-      if (typeof release.tag_name !== 'undefined' && semverLt(packageDetails.version, release.tag_name)) {
+      if (typeof release.tag_name !== 'undefined' && semverLt(packageDetails.version.split('-')[0], release.tag_name.split('-')[0])) {
         this.setState({ newVersion: true });
       }
     })
