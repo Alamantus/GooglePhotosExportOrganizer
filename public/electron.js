@@ -67,7 +67,12 @@ ipcMain.handle('extract', (event, zipFolderPath, unzipFolderPath) => {
 
 ipcMain.handle('organize', (event, unzipFolderPath, organizeIntoPath, renameStrategy, insertExif = false) => {
   organize(unzipFolderPath, organizeIntoPath, renameStrategy, insertExif, (report) => {
-    mainWindow.webContents.send('progress', report);
+    if (typeof report.error === 'undefined') {
+      mainWindow.webContents.send('progress', report);
+    } else {
+      console.error(report);
+      // mainWindow.webContents.send('file-error', report);
+    }
   });
 });
 
