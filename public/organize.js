@@ -20,8 +20,11 @@ function organize(currentPath, organizeIntoPath, renameStrategy = 'KEEP', insert
     if (report.addFileProcessed) {
       processedFiles++;
     }
-    if (report.error && report.errored) {
-      erroredFiles.push(report.errored);
+    if (report.error) {
+      progressReporter(report);
+      if (report.errored) {
+        erroredFiles.push(report.errored);
+      }
     }
     if (reports % 100 === 0) {    // Send report every 100 reports
       const reportToSend = {
