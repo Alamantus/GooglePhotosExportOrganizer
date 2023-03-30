@@ -2,6 +2,16 @@
 
 A tool for extracting and organizing exported Google Photos folders. Built with React!
 
+---
+
+## Notice
+
+This tool has been reported to not work reliably anymore, and I can't devote any time into researching what might be wrong.
+
+Please use at your own risk and understand that it may no longer work!
+
+---
+
 [See Instructions & Downloads](https://alamantus.github.io/GooglePhotosExportOrganizer/)
 
 ---
