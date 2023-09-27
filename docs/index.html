@@ -37,28 +37,28 @@
       <div class="4 col">
         <a href="https://github.com/Alamantus/GooglePhotosExportOrganizer/releases/download/v1.1.1/GooglePhotosExportOrganizer_Windows.zip"
           download="GooglePhotosExportOrganizer_Windows.zip"
-          class="btn umami--click--download-windows">
+          class="btn tinystats">
           For Windows
         </a>
       </div>
       <div class="4 col">
         <a href="https://github.com/Alamantus/GooglePhotosExportOrganizer/releases/download/v1.1.1/GooglePhotosExportOrganizer_MacOS.zip"
           download="GooglePhotosExportOrganizer_MacOS.zip"
-          class="btn umami--click--download-macos">
+          class="btn tinystats">
           For MacOS
         </a>
       </div>
       <div class="4 col">
         <a href="https://github.com/Alamantus/GooglePhotosExportOrganizer/releases/download/v1.1.1/GooglePhotosExportOrganizer_Linux.zip"
           download="GooglePhotosExportOrganizer_Linux.zip"
-          class="btn umami--click--download-linux">
+          class="btn tinystats">
           For Linux
         </a>
       </div>
     </article>
     <footer style="margin-top:20px;">
       <p>
-        <a href="https://github.com/Alamantus/GooglePhotosExportOrganizer/releases/latest">See Changelog</a>
+        <a href="https://github.com/Alamantus/GooglePhotosExportOrganizer/releases/latest" class="tinystats">See Changelog</a>
       </p>
     </footer>
   </section>
@@ -161,6 +161,32 @@
     </p>
   </div>
 </footer>
+<script type="text/javascript" src="https://stats.alamantus.com/"></script>
+<script type="text/javascript">
+(function() {
+  window.tinystats = new TinyStats(function () {
+    const extraData = {};
+    if (document.referrer) extraData.referrer = document.referrer;
+    if (this.clickTrigger) {
+      extraData.clicked = {
+        text: this.clickTrigger.innerText,
+      };
+      if (this.clickTrigger.href) extraData.clicked.href = this.clickTrigger.href;
+      if (this.clickTrigger.id) extraData.clicked.id = this.clickTrigger.id;
+      delete this.clickTrigger;
+    }
+    const hasData = Object.keys(extraData).reduce((result, key) => (result === true || Object.hasOwn(extraData, key)), false);
+    return hasData ? extraData : null;
+  });
+  document.querySelectorAll('.tinystats').forEach(el => {
+    el.addEventListener('click', e => {
+      window.tinystats.clickTrigger = event.target;
+      window.tinystats.report();
+    });
+  });
+  window.tinystats.report();
+})();
+</script>
 </body>
 
 </html>
