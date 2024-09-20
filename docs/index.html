@@ -161,32 +161,6 @@
     </p>
   </div>
 </footer>
-<script type="text/javascript" src="https://stats.alamantus.com/"></script>
-<script type="text/javascript">
-(function() {
-  window.tinystats = new TinyStats(function () {
-    const extraData = {};
-    if (document.referrer) extraData.referrer = document.referrer;
-    if (this.clickTrigger) {
-      extraData.clicked = {
-        text: this.clickTrigger.innerText,
-      };
-      if (this.clickTrigger.href) extraData.clicked.href = this.clickTrigger.href;
-      if (this.clickTrigger.id) extraData.clicked.id = this.clickTrigger.id;
-      delete this.clickTrigger;
-    }
-    const hasData = Object.keys(extraData).reduce((result, key) => (result === true || Object.hasOwn(extraData, key)), false);
-    return hasData ? extraData : null;
-  });
-  document.querySelectorAll('.tinystats').forEach(el => {
-    el.addEventListener('click', e => {
-      window.tinystats.clickTrigger = event.target;
-      window.tinystats.report();
-    });
-  });
-  window.tinystats.report();
-})();
-</script>
 </body>
 
 </html>
